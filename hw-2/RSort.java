@@ -17,7 +17,21 @@ public class RSort
       ====================*/
     public static int[] merge(int[] a, int[] b) 
     {
-	
+	int[] result = new int[a.length + b.length];
+	int ai = 0; 
+	int bi = 0;
+	int i = 0;
+	while(ai < a.length && bi < b.length)
+	{
+	    result[i++] = (a[ai] < b[bi]) ? a[ai++] : b[bi++];
+	}
+	int[] arr = (ai != a.length) ? a : b;
+	int arri = (ai != a.length) ? ai : bi;
+	while(arri < arr.length)
+	{
+	    result[i++] = arr[arri++];
+	}
+	return result;
     }
 
     /*======== public static void swap() ==========
