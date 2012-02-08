@@ -9,7 +9,7 @@ public class fibs
 	{
 	    throw new IllegalArgumentException("non-positive input");
 	}
-	return (n<3) ? 1 : fibR(n-1) + fibR(n-2);
+	return (n < 3) ? 1 : fibR(n - 1) + fibR(n - 2);
     }
     
     public static int fibA(int n)

@@ -121,6 +121,7 @@ public class RSort
 	int[] a = new int[5];
 	int[] b = new int[5];
 	int[] c;
+	
 	populate(a);
 	populate(b);
 
