@@ -4,6 +4,40 @@ import java.util.*;
 public class RSort 
 {
     /*======== public static int[] merge() ==========
+      Inputs:  int[] a 
+      Returns: 
+               A new array of ints, containing all the elements of the 
+	       parameter array, in ascending order.
+      As I was not in class and minutia is not yet up, I do not know whether
+      this is the desired solution.
+
+      02/12/12 02:40:13
+      mrudoy
+      ====================*/
+    public static int[] mergeSort(int[] a) 
+    {
+	if(a.length == 1)
+	{
+	    return a;
+	}
+
+	int mid = a.length / 2;
+	int[] a1, a2;
+	a1 = new int[mid];
+	a2 = new int[a.length - mid];
+
+	for(int i = 0; i < mid; i++)
+	{
+	    a1[i] = a[i];
+	}
+	for(int i = mid; i < a.length; i++)
+	{
+	    a2[i - mid] = a[i];
+	}
+	return merge(mergeSort(a1), mergeSort(a2));
+    }
+
+    /*======== public static int[] merge() ==========
       Inputs:  int[] a
                int[] b 
       Returns: 
@@ -33,7 +67,7 @@ public class RSort
 	}
 	return result;
     }
-
+    
     /*======== public static void swap() ==========
       Inputs:  int[] array
                int a
