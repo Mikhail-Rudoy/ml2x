@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.*;
 
 public class RSort 
@@ -20,7 +19,6 @@ public class RSort
 	{
 	    return a;
 	}
-
 	int mid = a.length / 2;
 	int[] a1, a2;
 	a1 = new int[mid];
@@ -51,7 +49,7 @@ public class RSort
       ====================*/
     public static int[] merge(int[] a, int[] b) 
     {
-	int[] result = new int[a.length + b.length];
+    int[] result = new int[a.length + b.length];
 	int ai = 0; 
 	int bi = 0;
 	int i = 0;
@@ -163,8 +161,10 @@ public class RSort
 
 	c = merge(a, b);
 	
-	printArray(a);
-	printArray(b);
-	printArray(c);
+	System.out.println("merge(" + Arrays.toString(a) + ", " + Arrays.toString(b) + ") = " + Arrays.toString(c));
+	
+	c = new int[8];
+	populate(c);
+	System.out.print("mergeSort(" + Arrays.toString(c) + ") = " + Arrays.toString(mergeSort(c)));
     }
 }
