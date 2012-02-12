@@ -152,19 +152,15 @@ public class RSort
     {
 	int[] a = new int[5];
 	int[] b = new int[5];
-	int[] c;
+	int[] c = new int[8];
 	populate(a);
 	populate(b);
+	populate(c);
 
 	insertionSort(a);
 	insertionSort(b);
 
-	c = merge(a, b);
-	
-	System.out.println("merge(" + Arrays.toString(a) + ", " + Arrays.toString(b) + ") = " + Arrays.toString(c));
-	
-	c = new int[8];
-	populate(c);
+	System.out.println("merge(" + Arrays.toString(a) + ", " + Arrays.toString(b) + ") = " + Arrays.toString(merge(a, b)));	
 	System.out.print("mergeSort(" + Arrays.toString(c) + ") = " + Arrays.toString(mergeSort(c)));
     }
 }
