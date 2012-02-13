@@ -161,6 +161,6 @@ public class RSort
 	insertionSort(b);
 
 	System.out.println("merge(" + Arrays.toString(a) + ", " + Arrays.toString(b) + ") = " + Arrays.toString(merge(a, b)));	
-	System.out.print("mergeSort(" + Arrays.toString(c) + ") = " + Arrays.toString(mergeSort(c)));
+	System.out.println("mergeSort(" + Arrays.toString(c) + ") = " + Arrays.toString(mergeSort(c)));
     }
 }
