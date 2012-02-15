@@ -2,6 +2,74 @@ import java.util.*;
 
 public class RSort 
 {
+    /*======== public static void quickSort() ==========
+      Inputs:  int[] a
+               int start
+	       int end 
+      Returns: 
+      
+      Performs an in-place quicksort. The general idea for the quicksort
+      is to partition the list, then quicksort each partition.
+
+      02/15/12 09:36:55
+      jdyrlandweaver
+      ====================*/
+    public static void quickSort(int[] a, int start, int end)
+    {
+	if(start >= end)
+	{
+	    return;
+	}
+	int mid = partition(a, start, end);
+	quickSort(a, start, mid);
+	quickSort(a, mid + 1, mid);
+    }
+
+    /*======== public static int partition() ==========
+      Inputs:  int[] a
+               int start
+	       int end 
+      Returns: The index of the end of the first partition
+
+      
+      Modifies array a such that every element in on the left is less
+      than or equal to every element on the right.
+      Only looks at the values between indicies start and end, inclusive.
+      Should return the index that marks the end of the left (lesser)
+      partition.
+      02/15/12 09:38:01
+      jdyrlandweaver
+      ====================*/
+    public static int partition(int[] a, int start, int end)
+    {
+	int s0 = start;
+	int pivot = (a[start] + a[end] + a[(start + end) / 2]) / 3;
+	for(;;)
+	{
+	    while(a[start] < pivot && start <= end)
+	    {
+		start++;
+	    }
+	    while(a[end] >= pivot && start <= end)
+	    {
+		end--;
+	    }
+	    if(end == s0 - 1)
+	    {
+		return s0;
+	    }
+	    if(start > end)
+	    {
+		return end;
+	    }
+	    int i = a[start];
+	    a[start] = a[end];
+	    a[end] = i;
+	    start++;
+	    end++;
+	}
+    }
+
     /*======== public static int[] merge() ==========
       Inputs:  int[] a 
       Returns: 
@@ -162,5 +230,9 @@ public class RSort
 
 	System.out.println("merge(" + Arrays.toString(a) + ", " + Arrays.toString(b) + ") = " + Arrays.toString(merge(a, b)));	
 	System.out.println("mergeSort(" + Arrays.toString(c) + ") = " + Arrays.toString(mergeSort(c)));
+	System.out.println();
+
+	c = new int[8];
+	System.out.print(Arrays.toString(c) + "--" + partition(c, 0, 7) + "-->" + Arrays.toString(c));
     }
 }
