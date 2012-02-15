@@ -22,7 +22,21 @@ public class RSort
 	}
 	int mid = partition(a, start, end);
 	quickSort(a, start, mid);
-	quickSort(a, mid + 1, mid);
+	quickSort(a, mid + 1, end);
+    }
+
+    /*======== public static void quickSort() ==========
+      Inputs:  int[] a
+      
+      Performs an in-place quicksort. The general idea for the quicksort
+      is to partition the list, then quicksort each partition.
+
+      02/15/12 09:36:55
+      jdyrlandweaver
+      ====================*/
+    public static void quickSort(int[] a)
+    {
+	quickSort(a, 0, a.length - 1);
     }
 
     /*======== public static int partition() ==========
@@ -46,13 +60,14 @@ public class RSort
 	int pivot = (a[start] + a[end] + a[(start + end) / 2]) / 3;
 	for(;;)
 	{
-	    while(a[start] < pivot && start <= end)
+	    
+	    while(start <= end && a[start] < pivot)
 	    {
 		start++;
 	    }
-	    while(a[end] >= pivot && start <= end)
+	    while(start <= end && a[end] >= pivot)
 	    {
-		end--;
+	    	end--;
 	    }
 	    if(end == s0 - 1)
 	    {
@@ -66,7 +81,7 @@ public class RSort
 	    a[start] = a[end];
 	    a[end] = i;
 	    start++;
-	    end++;
+	    end--;
 	}
     }
 
@@ -233,6 +248,13 @@ public class RSort
 	System.out.println();
 
 	c = new int[8];
-	System.out.print(Arrays.toString(c) + "--" + partition(c, 0, 7) + "-->" + Arrays.toString(c));
+	populate(c);
+	System.out.println("partition: " + Arrays.toString(c) + "--" + partition(c, 0, 7) + "-->" + Arrays.toString(c));
+
+	c = new int[15];
+	populate(c);
+	System.out.print("quickSort(" + Arrays.toString(c) + ") = ");
+	quickSort(c);
+	System.out.println(Arrays.toString(c));
     }
 }
