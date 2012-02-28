@@ -17,12 +17,12 @@ public class ALStack<T>
 
     public T pop()
     {
-	return isEmpty() ? null : arrl.remove(arrl.length - 1);
+	return isEmpty() ? null : arrl.remove(arrl.size() - 1);
     }
     
     public T peek()
     {
-	return isEmpty() ? null : arrl.get(arrl.length - 1);
+	return isEmpty() ? null : arrl.get(arrl.size() - 1);
     }
     
     public boolean isEmpty()
@@ -32,6 +32,14 @@ public class ALStack<T>
     
     public static void main(String[] args)
     {
-	
+	ALStack<String> stack = new ALStack<String>();
+	System.out.println(stack.peek());
+	stack.push("hi");
+	stack.push("yo");
+	System.out.println(stack.isEmpty());
+	System.out.println(stack.peek());
+	System.out.println(stack.pop());
+	System.out.println(stack.pop());
+	System.out.println(stack.isEmpty());
     }
 }
