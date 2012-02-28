@@ -15,7 +15,7 @@ public class AStack
     public AStack(Object[] src)
     {
 	top = src.length;
-	arr = new Object[2 * src.length + 5]
+	arr = new Object[2 * src.length + 5];
 	for(int i = 0; i < src.length; i++)
 	{
 	    arr[i] = src[i];
@@ -60,6 +60,14 @@ public class AStack
 
     public static void main(String[] args) 
     {
-	
+	AStack stack = new AStack();
+	System.out.println(stack.peek());
+	stack.push("hi");
+	stack.push("yo");
+	System.out.println(stack.isEmpty());
+	System.out.println(stack.peek());
+	System.out.println(stack.pop());
+	System.out.println(stack.pop());
+	System.out.println(stack.isEmpty());
     }
 }
