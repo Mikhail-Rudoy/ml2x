@@ -10,6 +10,15 @@ public class ALStack<T>
 	arrl = new ArrayList<T>();
     }
     
+    public ALStack(T[] src)
+    {
+	this();
+	for(int i = 0; i < src.length; i++)
+	{
+	    push(src[i]);
+	}
+    }
+    
     public void push(T o)
     {
 	arrl.add(o);

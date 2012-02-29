@@ -1,28 +1,28 @@
 import java.io.*;
 import java.util.*;
 
-public class AStack
+public class AStack<T>
 {
     private int top;
-    private Object[] arr;
+    private T[] arr;
     
     public AStack() 
     {
 	top = 0;
-	arr = new Object[5];
+	arr = (T[])(new Object[5]);
     }
     
-    public AStack(Object[] src)
+    public AStack(T[] src)
     {
 	top = src.length;
-	arr = new Object[2 * src.length + 5];
+	arr = (T[])(new Object[2 * src.length + 5]);
 	for(int i = 0; i < src.length; i++)
 	{
 	    arr[i] = src[i];
 	}
     }
     
-    public void push(Object o)
+    public void push(T o)
     {
 	if(top == arr.length)
 	{
@@ -31,14 +31,14 @@ public class AStack
 	arr[top++] = o;
     }
     
-    public Object pop()
+    public T pop()
     {
-	Object o = peek();
+	T o = peek();
 	top = isEmpty() ? 0 : top - 1;
 	return o;
     }
     
-    public Object peek()
+    public T peek()
     {
 	return isEmpty() ? null : arr[top - 1];
     }
@@ -50,7 +50,7 @@ public class AStack
     
     private void expand() 
     {
-	Object[] n = new Object[arr.length * 2 + 1];
+	T[] n = (T[])(new Object[arr.length * 2 + 1]);
 	for(int i = 0; i < arr.length; i++)
 	{
 	    n[i] = arr[i];
@@ -60,7 +60,7 @@ public class AStack
 
     public static void main(String[] args) 
     {
-	AStack stack = new AStack();
+	AStack<String> stack = new AStack<String>();
 	System.out.println(stack.peek());
 	stack.push("hi");
 	stack.push("yo");
