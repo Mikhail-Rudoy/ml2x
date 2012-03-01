@@ -3,7 +3,7 @@ import java.util.*;
 
 public class ALQueue<Type>
 {
-    ArrayList<Type> AL;
+    private ArrayList<Type> AL;
     
     public ALQueue()
     {
