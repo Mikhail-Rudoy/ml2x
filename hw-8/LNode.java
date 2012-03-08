@@ -31,4 +31,9 @@ public class LNode<E>
     {
 	next = n;
     }
+
+    public String toString()
+    {
+	return data.toString();
+    }
 }

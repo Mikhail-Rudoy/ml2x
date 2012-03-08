@@ -101,7 +101,17 @@ public class LList<E>
       ====================*/
     public E get(int index)
     {
-	
+	if(index < 0 || index >= size)
+	{
+	    throw new IndexOutOfBoundsException();
+	}
+	LNode<E> mynode = first.getNext();
+	while(index != 0)
+	{
+	    mynode = mynode.getNext();
+	    index = index - 1;
+	}
+	return mynode.getData();
     }
     
     /*======== public void set() ==========
@@ -118,7 +128,17 @@ public class LList<E>
       ====================*/
     public void set(int index, E data)
     {
-	
+	if(index < 0 || index >= size)
+	{
+	    throw new IndexOutOfBoundsException();
+	}
+	LNode<E> mynode = first.getNext();
+	while(index != 0)
+	{
+	    mynode = mynode.getNext();
+	    index = index - 1;
+	}
+	mynode.setData(data);
     }
     
     /*======== public int size()) ==========
@@ -131,12 +151,19 @@ public class LList<E>
       ====================*/
     public int size()
     {
-	
+	return size;
     }
     
     public String toString()
     {
-	
+	String result = "( ";
+	LNode<E> mynode = first;
+	while(mynode.next != null)
+	{
+	    mynode = mynode.getNext();
+	    result = result + mynode.toString() + " ";
+	}
+	return result + ")";
     }
     
     public static void main(String[] args)
