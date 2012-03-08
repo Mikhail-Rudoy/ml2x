@@ -70,7 +70,20 @@ public class LList<E>
       ====================*/
     public void add(int index, E data)
     {
-	
+	if(index < 0 || index >= size)
+	{
+	    throw new IndexOutOfBoundsException();
+	}
+	LNode<E> ln = new LNode<E>(data);
+	LNode<E> mynode = first;
+	while(index != 0)
+	{
+	    mynode = mynode.getNext();
+	    index = index - 1;
+	}
+	ln.setNext(mynode.getNext());
+	mynode.setNext(ln);
+	size++;
     }
     
     /*======== public E remove() ==========
@@ -87,7 +100,19 @@ public class LList<E>
       ====================*/
     public E remove(int index)
     {
-	
+	if(index < 0 || index >= size)
+	{
+	    throw new IndexOutOfBoundsException();
+	}
+	LNode<E> mynode = first;
+	while(index != 0)
+	{
+	    mynode = mynode.getNext();
+	    index = index - 1;
+	}
+	E result = mynode.getNext().getData();
+	mynode.setNext(mynode.getNext().getNext());
+	return result;
     }
     
     /*======== public E get() ==========
@@ -158,7 +183,7 @@ public class LList<E>
     {
 	String result = "( ";
 	LNode<E> mynode = first;
-	while(mynode.next != null)
+	while(mynode.getNext() != null)
 	{
 	    mynode = mynode.getNext();
 	    result = result + mynode.toString() + " ";
@@ -168,6 +193,18 @@ public class LList<E>
     
     public static void main(String[] args)
     {
-	
+	LList<String> list = new LList<String>();
+	System.out.println(list);
+	list.add("hi");
+	list.add("yo");
+	list.add("sup");
+	list.add(1, "inserted_after");
+	System.out.println(list);
+	System.out.println(list.get(2));
+	System.out.println(list.size());
+	list.set(1, "switched");
+	System.out.println(list);
+	System.out.println(list.remove(2));
+	System.out.println(list);
     }
 }
