@@ -1,0 +1,18 @@
+1) The following is the completed table
+
+Degrees		|	Compass Direction
+0		|	North
+45		|	Northeast
+90		|	East
+135		|	Southeast
+180		|	South
+225		|	Southwest
+270		|	West
+315		|	Northwest
+360		|	North
+
+2) I can move the bug to any lattice position in the grid. Putting him outside the grid results in an IllegalArgumentException.
+
+3) The Actor method void setColor(java.awt.Color) changes the color of an Actor instance (i.e. rock, bug, or flower).
+
+4) The bug disappeared, and is probably being deallocated by the garbage collector around now.
