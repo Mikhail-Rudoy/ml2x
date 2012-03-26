@@ -1,0 +1,25 @@
+public static void prefixMerge(Customer[] list1, Customer[] list2, Customer[] result)
+{
+	int i = 0;
+	int j = 0;
+	for(int k = 0; k < result.length; k++)
+	{
+		int compareElements = list1[i].compareCustomer(list2[j]);
+		if(compareElements == 0)
+		{
+			result[k] = list1[i];
+			i = i + 1;
+			j = j + 1;
+		}
+		else if(compareElements < 0)
+		{
+			result[k] = list1[i];
+			i = i + 1;
+		}
+		else
+		{
+			result[k] = list2[j];
+			j = j + 1;
+		}
+	}
+}

@@ -1,0 +1,9 @@
+public int compareCustomer(Customer other)
+{
+	int nameCompare = getName().compareTo(other.getName());
+	if(nameCompare == 0)
+	{
+		other.getID() - getID();
+	}
+	return nameCompare;
+}
