@@ -1,0 +1,67 @@
+public boolean conflictsWith(Appointment other)
+{
+	return getTime().overlapsWith(other.getTime());
+}
+public void clearConflicts(Appointment appt)
+{
+	for(int i = apptList.size() - 1; i >= 0; i = i - 1)
+	{
+		if(apptList.get(i).conflictsWith(appt))
+		{
+			apptList.remove(i);
+		}
+	}
+}
+public boolean addApt(Appointment appt, boolean emergency)
+{
+	if(emergency)
+	{
+		clearConflicts(appt);
+	}
+	else
+	{
+		for(int i = 0; i < apptList.size(); i++)
+		{
+			if(apptList.get(i).conflictsWith(appt))
+			{
+				return false;
+			}
+		}
+	}
+	apptList.add(appt);
+	return true;
+}
+public int compareCustomer(Customer other)
+{
+	int nameCompare = getName().compareTo(other.getName());
+	if(nameCompare == 0)
+	{
+		other.getID() - getID();
+	}
+	return nameCompare;
+}
+public static void prefixMerge(Customer[] list1, Customer[] list2, Customer[] result)
+{
+	int i = 0;
+	int j = 0;
+	for(int k = 0; k < result.length; k++)
+	{
+		int compareElements = list1[i].compareCustomer(list2[j]);
+		if(compareElements == 0)
+		{
+			result[k] = list1[i];
+			i = i + 1;
+			j = j + 1;
+		}
+		else if(compareElements < 0)
+		{
+			result[k] = list1[i];
+			i = i + 1;
+		}
+		else
+		{
+			result[k] = list2[j];
+			j = j + 1;
+		}
+	}
+}
