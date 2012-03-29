@@ -107,19 +107,19 @@ public class Solver
 	throw new IllegalStateException();
     }
     
-    /*======== public void solve()) ==========
+    /*======== public void solve1() ==========
       Inputs:   
       Returns: 
 
       Wrapper method for the recursive solve method.
       ====================*/
-    public void solve()
+    public void solve1()
     {
 	maze[startx][starty]= '#';
-	solve(startx, starty);
+	solve1(startx, starty);
     }
     
-    /*======== public void solve() ==========
+    /*======== public void solve1() ==========
       Inputs:  int x
                int y 
       Returns: 
@@ -133,7 +133,7 @@ public class Solver
       Use the delay() method so that you can watch the maze
       get solved over time.      
       ====================*/
-    public void solve(int x, int y)
+    public void solve1(int x, int y)
     {
 	System.out.println(this);
 	delay(37);
@@ -173,19 +173,92 @@ public class Solver
 	    switch(d)
 	    {
 	    case 'w':
-		solve(x, y + 1);
+		solve1(x, y + 1);
 		break;
 	    case 'a':
-		solve(x - 1, y);
+		solve1(x - 1, y);
 		break;
 	    case 's':
-		solve(x, y - 1);
+		solve1(x, y - 1);
 		break;
 	    case 'd':
-		solve(x + 1, y);
+		solve1(x + 1, y);
 		break;
 	    }
 	}
+    }
+    
+    /*======== public void solve1() ==========
+      Inputs:   
+      Returns: 
+
+      Wrapper method for the recursive solve method.
+      ====================*/
+    public void solve2()
+    {
+	maze[startx][starty]= '#';
+	Queue<Integer> q = new LinkedList<Integer>();
+	q.add(startx);
+	q.add(starty);
+	solve2(q);
+    }
+    
+    /*======== public void solve1() ==========
+      Inputs:  int x
+               int y 
+      Returns: 
+
+      Finds a path from (x, y) to the end of the maze, 
+      marked with a '$'.
+      Should keep track of which spaces have been visited 
+      and are on the path vs visited and are not on the path.
+      Should be a recursive solution
+
+      Use the delay() method so that you can watch the maze
+      get solved over time.      
+      ====================*/
+    public void solve2(Queue<Integer> q)
+    {
+	System.out.println(this);
+	delay(37);
+	if(q.peek() == null)
+	{
+	    return;
+	}
+	int x = q.remove();
+	int y = q.remove();
+	if(maze[x][y] == '$')
+	{
+	    solved = true;
+	    return;
+	}
+	if(maze[x][y] == 'X')
+	{
+	    solve2(q);
+	    return;
+	}
+	maze[x][y] = 'X';
+	if(maze[x+1][y] == '#' || maze[x+1][y] == '$')
+	{
+	    q.add(x + 1);
+	    q.add(y);
+	}
+	if(maze[x-1][y] == '#' || maze[x-1][y] == '$')
+	{
+	    q.add(x - 1);
+	    q.add(y);
+	}
+	if(maze[x][y+1] == '#' || maze[x][y+1] == '$')
+	{
+	    q.add(x);
+	    q.add(y + 1);
+	}
+	if(maze[x][y-1] == '#' || maze[x][y-1] == '$')
+	{
+	    q.add(x);
+	    q.add(y - 1);
+	}
+	solve2(q);
     }
     
     public static void main(String[] args)
@@ -195,6 +268,6 @@ public class Solver
 	System.out.println("[2J"); //clears the screen
 	System.out.println(s);
 	
-	s.solve();
+	s.solve2();
     }
 }
