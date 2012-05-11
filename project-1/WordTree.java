@@ -15,24 +15,6 @@ public class WordTree
 	children = new WordTree[26];
     }
     
-    private WordTree(char c)
-    {
-	if ('a' <= c && c <= 'z')
-	{
-	    rootLetter = c;
-	}
-	else if ('A' <= c && c <= 'Z')
-	{
-	    rootLetter = c - 'A' + 'a';
-	}
-	else
-	{
-	    throw new IllegalArgumentException("Please use an alphabetic character");
-	}
-	numWords = 0;
-	children = new WordTree[26];
-    }
-    
     private WordTree(String word)
     {
 	word = word.toLowerCase();
@@ -47,11 +29,10 @@ public class WordTree
 		throw new IllegalArgumentException("Please use alphabetic characters");
 	    }
 	}
-	else
-	{
-	    this(word.charAt(0));
-	}
-	add(word);
+	rootLetter = word.charAt(0);
+	numWords = 0;
+	children = new WordTree[26];
+	add(word.substring(1));
     }
     
     public WordTree(Iterable<String> words)
@@ -71,7 +52,9 @@ public class WordTree
 		}
 	    }
 	}
-	this();
+	rootLetter = 0;
+	numWords = 0;
+	children = new WordTree[26];
 	for(String word : words)
 	{
 	    add(word);
@@ -81,35 +64,53 @@ public class WordTree
     public void add(String word)
     {
 	word = word.toLowerCase();
-	if (word.length() == 0)
+	if (rootLetter == 0)
 	{
-	    throw new IllegalArgumentException("Please do not use empty words");
-	}
-	for (int i = 0; i < word.length(); i++)
-	{
-	    if (!('a' <= word.charAt(i) && word.charAt(i) <= 'z'))
+	    if(word.length() == 0)
 	    {
-		throw new IllegalArgumentException("Please use alphabetic characters");
+		throw new IllegalArgumentException("Please do not use empty words");
+	    }
+	    for (int i = 0; i < word.length(); i++)
+	    {
+		if (!('a' <= word.charAt(i) && word.charAt(i) <= 'z'))
+		{
+		    throw new IllegalArgumentException("Please use alphabetic characters");
+		}
 	    }
 	}
+	
 	numWords++;
+	if (word.length() == 0)
+	{
+	    rootLetter = (char)(rootLetter - 'a' + 'A');
+	    return;
+	}
+	
 	if (rootLetter == 0)
 	{
 	    char next = word.charAt(0);
 	    if(children[next - 'a'] == null)
 	    {
-		children[next - 'a'] = new WordTree(rest);
+		children[next - 'a'] = new WordTree(word);
 	    }
 	    else
 	    {
-		children[next - 'a'].add(word);
+		children[next - 'a'].add(word.substring(1));
 	    }
 	}
 	else
 	{
 	    if (word.length() == 1)
 	    {
-		rootLetter = ("" + rootLetter).toUpperCase().charAt(0);
+		char next = word.charAt(0);
+		if(children[next - 'a'] == null)
+		{
+		    children[next - 'a'] = new WordTree(word);
+		}
+		else
+		{
+		    children[next - 'a'].add("");
+		}
 	    }
 	    else
 	    {
@@ -117,7 +118,7 @@ public class WordTree
 		String rest = word.substring(1);
 		if(children[next - 'a'] == null)
 		{
-		    children[next - 'a'] = new WordTree(rest);
+		    children[next - 'a'] = new WordTree(word);
 		}
 		else
 		{
@@ -154,7 +155,7 @@ public class WordTree
 	    }
 	    else
 	    {
-		return children[word.charAt(0) - 'a'].size(word);
+		return children[word.charAt(0) - 'a'].size(word.substring(1));
 	    }
 	}
 	else
@@ -181,7 +182,7 @@ public class WordTree
 	{
 	    System.out.println(prefix + (char)(rootLetter - 'A' + 'a'));
 	}
-	prefix = prefix + ("" + rootLetter).toLowerCase().charAt(0);
+	prefix = prefix + ("" + (rootLetter != 0 ? rootLetter : "")).toLowerCase();
 	for(int i = 0; i < 26; i++)
 	{
 	    if (children[i] != null)
@@ -217,6 +218,39 @@ public class WordTree
 		return (rootLetter == 0 ? "" : ("" + rootLetter).toLowerCase()) + children[i].randomWord();
 	    }
 	    randomOf -= children[i].size();
+	}
+	throw new IllegalStateException("Something went wrong");
+    }
+    
+    public static void main(String[] args)
+    {
+	ArrayList<String> words = new ArrayList<String>();
+	words.add("a");
+	words.add("aa");
+	words.add("aal");
+	words.add("aalii");
+	words.add("aam");
+	words.add("aani");
+	words.add("aardvark");
+	words.add("aardwolf");
+	words.add("aaron");
+	words.add("aaronic");
+	words.add("aaronical");
+	words.add("aaronite");
+	words.add("aaronitic");
+	words.add("aaru");
+	words.add("ab");
+	words.add("car");
+	words.add("bob");
+	words.add("zap");
+	WordTree wt = new WordTree(words);
+	wt.traverse();
+	System.out.println(wt.size());
+	System.out.println(wt.size("aa"));
+	System.out.println();
+	for(int i = 0; i < 10; i++)
+	{
+	    System.out.println(wt.randomWord());
 	}
     }
 }
