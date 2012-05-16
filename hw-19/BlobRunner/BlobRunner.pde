@@ -1,7 +1,7 @@
 
-Blob[] bobs;
-int popSize = 16;
-
+Blob[] blobs;
+int popSize = 17;
+int w, h;
 
 /*=====================================
  The trikiest part of setup is to make 
@@ -10,7 +10,11 @@ int popSize = 16;
  big enough to contain all of the blobs.
  ====================================*/
 void setup() {
-
+  w = (int)sqrt(popSize - 1) + 1;
+  h = (popSize - 1) / w + 1;
+  size(150 * w, 150 * h);
+  background(0);
+  populate();
 }
 
 /*=====================================
@@ -18,7 +22,11 @@ void setup() {
  the array of blobs and display each.
  ====================================*/
 void draw() {
-
+  background(0);
+  for (Blob b : blobs)
+  {
+    b.display();
+  }
 }
 
 /*=====================================
@@ -33,6 +41,20 @@ void draw() {
  normal monitor).
  ====================================*/
 void populate() {
-
+  blobs = new Blob[popSize];
+  int i = 0;
+  for(int r = 0; r < h; r++)
+  {
+    while(i < popSize && i - r * w < w)
+    {
+      int x = 75 + 150 * (i - r  * w);
+      int y = r * 150 + 75;
+      int sides = (int)(random(10) + 3);
+      int rad = 50 + (int)(random(21));
+      int wobble = 3 + (int)(random(8));
+      blobs[i] = new Blob(x, y, sides, rad, wobble, wobble);
+      i++;
+    }
+  } 
 }
 
