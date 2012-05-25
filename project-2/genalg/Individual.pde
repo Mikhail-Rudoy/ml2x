@@ -38,6 +38,7 @@ static int Y_FACTOR = 6;
  For initial development set these to lower
  values to make testing easier.
  ====================================*/
+static int[] GENE_SIZE = {6, 5, 8, 8, 8, 4, 4};
 static int SIDE_GENE_SIZE = 6;
 static int RADIUS_GENE_SIZE = 5;
 static int COLOR_GENE_SIZE = 8;
@@ -70,20 +71,30 @@ class Individual {
    sides...)
    ====================================*/
   Individual(float cx, float cy) {
+    this();
+    for(int i = 0; i < chromosome.length; i++)
+    {
+      chromosome[i] = new Gene(GENE_SIZE[i]);
+    }
+    setPhenotype(cx, cy);
   }
 
   /*=====================================
    Call the display method of the phenotype, make sure to set the fill
    color appropriately
    ====================================*/
-  void display(boolean sf, boolean ss) {
+  void display() {
+    fill(chromosome[RED_COLOR].value, chromosome[GREEN_COLOR].value, chromosome[BLUE_COLOR].value);
+    phenotype.display();
+    fill(0);
   }
 
   /*=====================================
    Set phenotype to a new Blob with center cx, cy and 
    properties that align with gene values.
    ====================================*/
-  void setPhenotype(int cx, int cy) {
+  void setPhenotype(float cx, float cy) {
+    phenotype = new Blob(cx, cy, chromosome[SIDES].value, chromosome[RAD].value + RADIUS_EXTRA, chromosome[X_FACTOR].value, chromosome[Y_FACTOR].value);
   }
 
   /*=====================================
@@ -91,6 +102,10 @@ class Individual {
    debugging and development
    ====================================*/
   void printIndividual() {
+    for(Gene g : chromosome)
+    {
+      System.out.println(g.value);
+    }
   }
 
   /*=====================================
@@ -102,7 +117,13 @@ class Individual {
    as the center
    ====================================*/
   Individual mate(Individual other, int cx, int cy) {
-    return null;
+    Individual child = new Individual(cx, cy);
+    for(int i = 0; i < chromosome.length; i++)
+    {
+      child.chromosome[i] = new Gene((random(2) > 1 ? this : other).chromosome[i]);
+    }
+    child.setPhenotype(cx, cy);
+    return child;
   }
 
   /*=====================================
@@ -111,7 +132,13 @@ class Individual {
    The closer the two are, the higher the fitness value
    should be
    ====================================*/
-  void setFitness( Individual goal ) {
+  void setFitness(Individual goal)
+  {
+    fitness = MAX_INT;
+    for(int i = 0; i < chromosome.length; i++)
+    {
+      fitness -= (goal.chromosome[i].value - chromosome[i].value) * (goal.chromosome[i].value - chromosome[i].value);
+    }
   }
 
 
@@ -119,7 +146,15 @@ class Individual {
    Call the mutate method on a random number
    of genes.
    ====================================*/
-  void mutate() {
+  void mutate()
+  {
+    for (Gene g : chromosome)
+    {
+      if(random(2) > 1)
+      {
+        g.mutate();
+      }
+    }
   }
 }
 

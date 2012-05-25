@@ -26,15 +26,17 @@ Individual bestI;
  Setup the basic window properties
  ====================================*/
 void setup() {
-  Gene g = new Gene(10);
-  g.display();
-  Gene o = new Gene(g);
-  o.display();
-  for(int i = 0; i < 10; i++)
-  {
-    o.mutate();
-    o.display();
-  }
+  size(500, 500);
+  selected = new Individual(100, 100);
+  bestI = new Individual(300, 100);
+  population = new Individual[1];
+  population[0] = selected.mate(bestI, 100, 300);
+  selected.printIndividual();
+  System.out.println();
+  bestI.printIndividual();
+  System.out.println();
+  population[0].printIndividual();
+  System.out.println();
 }
 
 /*=====================================
@@ -47,6 +49,10 @@ void setup() {
  If mating mode is set to continuous, call mating season
  ====================================*/
 void draw() {
+  background(0);
+  selected.display();
+  bestI.display();
+  population[0].display();
 }
 
 /*=====================================

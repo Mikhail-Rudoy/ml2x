@@ -30,7 +30,7 @@ class Blob {
     yFactor = yf;
   }
   
-  void display(float f, boolean sf, boolean ss) {
+  void display() {
    
     float nx;
     float ny;
