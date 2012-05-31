@@ -50,8 +50,8 @@ class Blob {
       rx = (int)random(xFactor) * -1 * ((int)random(2) + 1);
       ry = (int)random(yFactor) * -1 * ((int)random(2) + 1);
       
-      nx = rad * cos( 2 * PI * t ) + x + rx;
-      ny = rad * sin( 2 * PI * t ) + y + ry;
+      nx = rad * cos( 2 * PI * t ) + x + rx + xFactor / 2.0;
+      ny = rad * sin( 2 * PI * t ) + y + ry + yFactor / 2.0;
       
       vertex(nx, ny);
     }    

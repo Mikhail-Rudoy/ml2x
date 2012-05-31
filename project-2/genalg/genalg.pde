@@ -1,6 +1,6 @@
 //"Constants"
 int POPULATION_SIZE = 36;
-int DRAW_OFFSET = int((pow( 2, RADIUS_GENE_SIZE ) + RADIUS_EXTRA) * 2);
+int DRAW_OFFSET = int((pow( 2, RADIUS_GENE_SIZE ) + RADIUS_EXTRA) * 2 + 30);
 
 //Global Variables
 int popRoot = ceil(sqrt(POPULATION_SIZE));
@@ -25,18 +25,20 @@ Individual bestI;
  generated individuals.
  Setup the basic window properties
  ====================================*/
-void setup() {
-  size(500, 500);
-  selected = new Individual(100, 100);
-  bestI = new Individual(300, 100);
-  population = new Individual[1];
-  population[0] = selected.mate(bestI, 100, 300);
-  selected.printIndividual();
-  System.out.println();
-  bestI.printIndividual();
-  System.out.println();
-  population[0].printIndividual();
-  System.out.println();
+void setup()
+{
+  size(DRAW_OFFSET * popRoot, DRAW_OFFSET * popRoot);
+  population = new Individual[POPULATION_SIZE];
+  for(int i = 0; i < POPULATION_SIZE; i++)
+  {
+    population[i] = new Individual(((i % popRoot) + 0.5) * DRAW_OFFSET, ((i / popRoot) + 0.5) * DRAW_OFFSET);
+  }
+  selectedX = -1;
+  selectedY = -1;
+  selected = null;
+  bestX = -1;
+  bestY = -1;
+  bestI = null;
 }
 
 /*=====================================
@@ -48,11 +50,22 @@ void setup() {
  highest fitness value.
  If mating mode is set to continuous, call mating season
  ====================================*/
-void draw() {
-  background(0);
-  selected.display();
-  bestI.display();
-  population[0].display();
+void draw()
+{
+  background(255);
+  stroke(0, 0, 255);
+  fill(250);
+  rect(selectedX * DRAW_OFFSET + 5, selectedY * DRAW_OFFSET + 5, DRAW_OFFSET - 10, DRAW_OFFSET - 10);
+  stroke(0);
+  rect(bestX * DRAW_OFFSET + 5, bestY * DRAW_OFFSET + 5, DRAW_OFFSET - 10, DRAW_OFFSET - 10);
+  for(Individual i : population)
+  {
+    i.display();
+  }
+  if(continuous)
+  {
+    matingSeason();
+  }
 }
 
 /*=====================================
@@ -61,7 +74,20 @@ void draw() {
  selectedX and selectedY so that a box can be
  drawn around it.
  ====================================*/
-void mouseClicked() {
+void mouseClicked()
+{
+  selectedX = (int)(mouseX / DRAW_OFFSET);
+  selectedY = (int)(mouseY / DRAW_OFFSET);
+  if(selectedX + popRoot * selectedY >= 0 && selectedX + popRoot * selectedY < POPULATION_SIZE)
+  {
+    selected = population[selectedX + popRoot * selectedY];
+  }
+  else
+  {
+    selected = null;
+    selectedX = -1;
+    selectedY = -1;
+  }
 }
 
 /*====================================
