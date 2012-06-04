@@ -46,7 +46,7 @@ class Gene {
   ====================================*/ 
   void mutate()
   {
-    int i = (int)random(10);
+    int i = (int)random(geneLength);
     genotype[i] = 1 - genotype[i];
     setValue();
   }

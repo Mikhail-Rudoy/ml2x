@@ -83,10 +83,16 @@ class Individual {
    Call the display method of the phenotype, make sure to set the fill
    color appropriately
    ====================================*/
-  void display() {
+  void display(boolean shouldShow) {
     fill(chromosome[RED_COLOR].value, chromosome[GREEN_COLOR].value, chromosome[BLUE_COLOR].value);
-    phenotype.display();
-    fill(0);
+    if(shouldShow)
+    {
+      phenotype.display((int)fitness);
+    }
+    else
+    {
+      phenotype.display();
+    }
   }
 
   /*=====================================
@@ -116,7 +122,7 @@ class Individual {
    The phenotype of the new Individual must be set, using cs and cy
    as the center
    ====================================*/
-  Individual mate(Individual other, int cx, int cy) {
+  Individual mate(Individual other, float cx, float cy) {
     Individual child = new Individual(cx, cy);
     for(int i = 0; i < chromosome.length; i++)
     {
@@ -134,13 +140,17 @@ class Individual {
    ====================================*/
   void setFitness(Individual goal)
   {
-    fitness = MAX_INT;
+    fitness = 100000;
     for(int i = 0; i < chromosome.length; i++)
     {
       fitness -= (goal.chromosome[i].value - chromosome[i].value) * (goal.chromosome[i].value - chromosome[i].value);
     }
   }
 
+  void setFitness(int value)
+  {
+    fitness = value;
+  }
 
   /*=====================================
    Call the mutate method on a random number

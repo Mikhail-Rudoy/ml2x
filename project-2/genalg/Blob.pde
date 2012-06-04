@@ -30,6 +30,14 @@ class Blob {
     yFactor = yf;
   }
   
+  void display(int val)
+  {
+    display();
+    
+    fill(0);
+    text("" + val, x - 20, y - 3);
+  }
+  
   void display() {
    
     float nx;
@@ -54,7 +62,7 @@ class Blob {
       ny = rad * sin( 2 * PI * t ) + y + ry + yFactor / 2.0;
       
       vertex(nx, ny);
-    }    
+    }
     endShape();
   }
 }

@@ -9,10 +9,12 @@ int selectedY;
 int bestX;
 int bestY;
 boolean continuous = false;
-float totalFitness;
+float totalFitness = 0;
 int speed;
+int countdown;
 int generation;
 float mutationRate = 0.05;
+boolean showFitness = true;
 
 //The actual individuals
 Individual[] population;
@@ -28,17 +30,9 @@ Individual bestI;
 void setup()
 {
   size(DRAW_OFFSET * popRoot, DRAW_OFFSET * popRoot);
-  population = new Individual[POPULATION_SIZE];
-  for(int i = 0; i < POPULATION_SIZE; i++)
-  {
-    population[i] = new Individual(((i % popRoot) + 0.5) * DRAW_OFFSET, ((i / popRoot) + 0.5) * DRAW_OFFSET);
-  }
-  selectedX = -1;
-  selectedY = -1;
-  selected = null;
-  bestX = -1;
-  bestY = -1;
-  bestI = null;
+  speed = 20;
+  countdown = 20;
+  populate();
 }
 
 /*=====================================
@@ -60,11 +54,16 @@ void draw()
   rect(bestX * DRAW_OFFSET + 5, bestY * DRAW_OFFSET + 5, DRAW_OFFSET - 10, DRAW_OFFSET - 10);
   for(Individual i : population)
   {
-    i.display();
+    i.display(showFitness);
   }
   if(continuous)
   {
-    matingSeason();
+    countdown--;
+    if(countdown <= 0)
+    {
+      matingSeason();
+      countdown = speed;
+    }
   }
 }
 
@@ -88,6 +87,13 @@ void mouseClicked()
     selectedX = -1;
     selectedY = -1;
   }
+  generation = 0;
+  setTotalFitness();
+  findBest();
+  System.out.println("Total fitness is " + totalFitness);
+  System.out.println("Best fitness is " + ((selected == null) ? -1 : bestI.fitness));
+  System.out.println("Generation " + generation);
+  System.out.println();
 }
 
 /*====================================
@@ -102,8 +108,46 @@ void mouseClicked()
  m: increase mutation rate
  n: decrease mutation rate
  ==================================*/
-void keyPressed() {
-  println(keyCode); //wil display the integer value for whatever key has been pressed
+void keyPressed()
+{
+  switch(keyCode)
+  {
+    case 39:
+      matingSeason();
+      break;
+    case 38:
+      speed--;
+      if(speed < 1)
+      {
+        speed = 1;
+      }
+      break;
+    case 40:
+      speed++;
+      break;
+    case 16:
+      continuous = !continuous;
+      break;
+    case 32:
+      populate();
+      break;
+    case 70:
+      showFitness = !showFitness;
+      break;
+    case 77:
+      mutationRate += 0.01;
+      if(mutationRate > 3.0)
+      {
+        mutationRate = 3.0;
+      }
+      break;
+    case 78:
+      mutationRate -= 0.01;
+      if(mutationRate < 0.0)
+      {
+        mutationRate = 0.0;
+      }
+  }
 }
 
 
@@ -117,7 +161,25 @@ void keyPressed() {
  Do not include the "selected" shape as a possible return value
  ==================================*/
 Individual select() {
-  return null;
+  int a = (int)random(POPULATION_SIZE);
+  int b = (int)random(POPULATION_SIZE);
+  while(population[a] == selected)
+  {
+    a = (int)random(POPULATION_SIZE);
+  }
+  while(population[a] == selected || a == b)
+  {
+    b = (int)random(POPULATION_SIZE);
+  }
+  if(population[a].fitness > population[b].fitness)
+  {
+    return population[a];
+  }
+  if(population[b].fitness > population[a].fitness)
+  {
+    return population[b];
+  }
+  return population[(random(2) > 1) ? a : b];
 }
 
 /*====================================
@@ -129,7 +191,33 @@ Individual select() {
  in the population, unmodified.
  ==================================*/
 
-void matingSeason() {
+void matingSeason()
+{
+  int i = 0;
+  Individual[] newPop = new Individual[POPULATION_SIZE];
+  if(selected != null)
+  {
+    newPop[i] = selected;
+    i++;
+    selected.setPhenotype(0.5 * DRAW_OFFSET, 0.5 * DRAW_OFFSET);
+  }
+  while(i < POPULATION_SIZE)
+  {
+    newPop[i] = select().mate(select(), ((i % popRoot) + 0.5) * DRAW_OFFSET, ((i / popRoot) + 0.5) * DRAW_OFFSET);
+    i++;
+  }
+  population = newPop;
+  mutate();
+  
+  selectedX = 0;
+  selectedY = 0;
+  setTotalFitness();
+  findBest();
+  generation++;
+  System.out.println("Total fitness is " + totalFitness);
+  System.out.println("Best fitness is " + ((selected == null) ? -1 : bestI.fitness));
+  System.out.println("Generation " + generation);
+  System.out.println();
 }
 
 /*====================================
@@ -137,7 +225,23 @@ void matingSeason() {
  Randomly call the mutate method an Individual (or Individuals)
  in the population.
  ==================================*/
-void mutate() {
+void mutate()
+{
+  for(Individual i : population)
+  {
+    if(i == null || i == selected)
+    {
+      continue;
+    }
+    for(int j = 0; j < (int)mutationRate; j++)
+    {
+      i.mutate();
+    }
+    if(random(1) < mutationRate - (int)mutationRate)
+    {
+      i.mutate();
+    }
+  }
 }
 
 /*====================================
@@ -146,7 +250,32 @@ void mutate() {
  of each individual.
  Make sure that each individual has an accurate fitness value
  ==================================*/
-void setTotalFitness() {
+void setTotalFitness()
+{
+  totalFitness = 0;
+  for(Individual b : population)
+  {
+    if(b == null)
+    {
+      continue;
+    }
+    if(selected == null)
+    {
+      b.setFitness((int)random(20));
+    }
+    else
+    {
+      b.setFitness(selected);
+    }
+    if(b != selected)
+    {
+      totalFitness += b.fitness;
+    }
+  }
+  if(selected == null)
+  {
+    totalFitness = -1;
+  }
 }
 
 /*====================================
@@ -154,7 +283,23 @@ void setTotalFitness() {
  Make sure to set the location of each individual such that
  they display nicely in a grid.
  ==================================*/
-void populate() {
+void populate()
+{
+  population = new Individual[POPULATION_SIZE];
+  for(int i = 0; i < POPULATION_SIZE; i++)
+  {
+    population[i] = new Individual(((i % popRoot) + 0.5) * DRAW_OFFSET, ((i / popRoot) + 0.5) * DRAW_OFFSET);
+  }
+  generation = 0;
+  selectedX = 0;
+  selectedY = 0;
+  selected = population[0];
+  setTotalFitness();
+  findBest();
+  System.out.println("Total fitness is " + totalFitness);
+  System.out.println("Best fitness is " + ((selected == null) ? -1 : bestI.fitness));
+  System.out.println("Generation " + generation);
+  System.out.println();
 }
 
 /*====================================
@@ -163,7 +308,30 @@ void populate() {
  Set bestX and bestY so that the best Individual can have a 
  square border drawn around it.
  ==================================*/
-void findBest() {
+void findBest()
+{
+  bestI = null;
+  bestX = -1;
+  bestY = -1;
+  if(selected == null)
+  {
+    return;
+  }
+  for(int i = 0; i < POPULATION_SIZE; i++)
+  {
+    Individual I = population[i];
+    
+    if(I == selected || I == null)
+    {
+      continue;
+    }
+    if(bestI == null || I.fitness > bestI.fitness)
+    {
+      bestI = I;
+      bestX = (i % popRoot);
+      bestY = (i / popRoot);
+    }
+  }
 }
 
 
