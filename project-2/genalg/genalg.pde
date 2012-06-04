@@ -1,5 +1,5 @@
 //"Constants"
-int POPULATION_SIZE = 36;
+int POPULATION_SIZE = 35;
 int DRAW_OFFSET = int((pow( 2, RADIUS_GENE_SIZE ) + RADIUS_EXTRA) * 2 + 30);
 
 //Global Variables
@@ -198,6 +198,8 @@ void matingSeason()
   if(selected != null)
   {
     newPop[i] = selected;
+    selectedX = 0;
+    selectedY = 0;
     i++;
     selected.setPhenotype(0.5 * DRAW_OFFSET, 0.5 * DRAW_OFFSET);
   }
@@ -209,8 +211,6 @@ void matingSeason()
   population = newPop;
   mutate();
   
-  selectedX = 0;
-  selectedY = 0;
   setTotalFitness();
   findBest();
   generation++;
